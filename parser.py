@@ -28,27 +28,32 @@ def insert_values(data):
     exit_y2 = 0
     flag = False
     v_seed = None
+    output = None
+    print(data)
     try:
         for key, value in data.items():
             key = key.lower()
             if key == "width":
                 width = int(value)
-            if key == "height":
+            elif key == "height":
                 height = int(value)
-            if key == "entry":
+            elif key == "entry":
                 x1 , y1 = value.split(',')
                 entry_x1, entry_y1 = (int(x1), int(y1))
-            if key == "exit":
+            elif key == "exit":
                 x2 , y2 = value.split(',')
                 exit_x2, exit_y2 = (int(x2), int(y2))
-            if key =="perfect":
+            elif key =="perfect":
                 if value.lower() == "true":
                     flag = True
-            if key == "seed" :
+            elif key == "seed" :
                 v_seed =int(value)
+            elif key == "output_file":
+                print(f"this is it {key}")
+                output = value
     except Exception as e:
         print(e)
-    return (width,height,entry_x1, entry_y1, exit_x2, exit_y2,flag, v_seed)
+    return (width,height,entry_x1, entry_y1, exit_x2, exit_y2,flag, v_seed, output)
 
 def validate_input(width, height, entry_cell, exit_cell):
     if width <= 0 or height <= 0:

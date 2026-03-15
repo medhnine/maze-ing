@@ -20,7 +20,7 @@ def main():
     # print(insert_values(result))
 
     
-    width ,height,entry_x1, entry_y1, exit_x2, exit_y2 ,flag,seed = insert_values(result)
+    width ,height,entry_x1, entry_y1, exit_x2, exit_y2 ,flag,seed, outputfile = insert_values(result)
     # exit_cell = (height -1, width - 1)
 
     validate_input(width,height,(entry_x1,entry_y1),(exit_x2,exit_y2))
@@ -51,7 +51,8 @@ def main():
     output += f"\n{entry_x1},{entry_y1}\n"
     output += f"\n{exit_x2},{exit_y2}\n"
     output += directions +"\n"
-    with open("maze.txt","w") as file:
+    print(outputfile)
+    with open(outputfile,"w") as file:
             file.write(output)
     print(maze.get_42_cells())
     maze.draw()
