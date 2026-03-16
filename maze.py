@@ -6,10 +6,11 @@ class Maze:
     SOUTH = 4
     WEST = 8
 
-    def __init__(self, width: int, height: int, seed_value):
+    def __init__(self, width: int, height: int, seed_value, show_42: bool = True):
         self.width = 1
         self.height = 1
         self.random = random.Random(seed_value)
+        self.show_42 = show_42
         self.set_dimension(width, height)
         self.grid = []
         for row in range(self.height):
@@ -97,8 +98,11 @@ class Maze:
                 if col == 0:
                     line += "|" if self.has_wall(row, col, "W") else " "
 
-                if self.check_42(self.height, self.width, row, col):
-                    line += " 4 "
+                if self.show_42 and self.check_42(self.height, self.width, row, col):
+                    if (col > (self.width / 2) - 1):
+                        line += " 2 "
+                    else:
+                        line += " 4 "
                 else:
                     line += "   "
 
@@ -131,6 +135,8 @@ class Maze:
 
     def get_42_cells(self):
         """Return the set of all cells that belong to the '42' pattern."""
+        if not self.show_42:
+            return set()
         cells = set()
         for r in range(self.height):
             for c in range(self.width):
@@ -233,6 +239,32 @@ class Maze:
                         # Pick a random neighbor direction and open the wall
                         self.random.shuffle(neighbors)
                         self.open_wall(row, col, neighbors[0])
+        
+        total_cells = self.width * self.height
+        extra_openings = max(2, total_cells // 8)
+        print(extra_openings)
+        all_cells = [(r, c)for r in range(self.height) for c in range(self.width)
+            if not (self.show_42 and self.check_42(self.height, self.width, r, c))
+        ]
+        self.random.shuffle(all_cells)
+        opened = 0
+        for row, col in all_cells:
+            if opened >= extra_openings:
+                break
+            neighbors = []
+            if row > 0 and not (self.show_42 and self.check_42(self.height, self.width, row - 1, col)):
+                neighbors.append("N")
+            if col < self.width - 1 and not (self.show_42 and self.check_42(self.height, self.width, row, col + 1)):
+                neighbors.append("E")
+            if row < self.height - 1 and not (self.show_42 and self.check_42(self.height, self.width, row + 1, col)):
+                neighbors.append("S")
+            if col > 0 and not (self.show_42 and self.check_42(self.height, self.width, row, col - 1)):
+                neighbors.append("W")
+            if neighbors:
+                self.random.shuffle(neighbors)
+                self.open_wall(row, col, neighbors[0])
+                opened += 1
+
     # 01/03/2026
     
     

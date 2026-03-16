@@ -26,19 +26,21 @@ def main():
     validate_input(width,height,(entry_x1,entry_y1),(exit_x2,exit_y2))
 
     # Minimum size check for 42 pattern (same as mazegen.py)
+    show_42 = True
     if width < 8 or height < 6:
         print("Maze is too small to display the '42' pattern (need at least 6x8)")
-        exit(2)
+        show_42 = False
 
     # Validate entry/exit are not inside the 42 zone
-    if Maze.check_42(height, width, entry_x1, entry_y1):
+    if show_42 and Maze.check_42(height, width, entry_x1, entry_y1):
         print(f"ENTRY ({entry_x1},{entry_y1}) is inside the 42 zone")
         exit(2)
-    if Maze.check_42(height, width, exit_x2, exit_y2):
+
+    if show_42 and Maze.check_42(height, width, exit_x2, exit_y2):
         print(f"EXIT ({exit_x2},{exit_y2}) is inside the 42 zone")
         exit(2)
 
-    maze = Maze(width, height, seed)
+    maze = Maze(width, height, seed, show_42)
     # maze.generate_binary_tree()
     maze.generate_dfs()
     if not flag:
@@ -54,7 +56,7 @@ def main():
     print(outputfile)
     with open(outputfile,"w") as file:
             file.write(output)
-    print(maze.get_42_cells())
+    # print(maze.get_42_cells())
     maze.draw()
     # hex_string = maze.to_hex_file((entry_x1, entry_y1),(exit_x2, exit_y2))
     

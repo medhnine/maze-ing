@@ -29,7 +29,6 @@ def insert_values(data):
     flag = False
     v_seed = None
     output = None
-    print(data)
     try:
         for key, value in data.items():
             key = key.lower()
@@ -46,13 +45,19 @@ def insert_values(data):
             elif key =="perfect":
                 if value.lower() == "true":
                     flag = True
+                elif value.lower() == "false":
+                    flag = False
+                else:
+                    raise ValueError("perfect ValueError")
             elif key == "seed" :
                 v_seed =int(value)
             elif key == "output_file":
-                print(f"this is it {key}")
                 output = value
+        # if flag == 2:
+            
     except Exception as e:
         print(e)
+        exit(2)
     return (width,height,entry_x1, entry_y1, exit_x2, exit_y2,flag, v_seed, output)
 
 def validate_input(width, height, entry_cell, exit_cell):
