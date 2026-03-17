@@ -5,8 +5,9 @@
 from maze import Maze
 from solver import MazeSolver
 from parser import *
-
+from display import run_display
 from sys import argv
+import random
         
 
 
@@ -15,6 +16,7 @@ from sys import argv
 def main():
     if len(argv) != 2:
         return
+    
     data = get_data()
     result = chuck_data(data)
     # print(insert_values(result))
@@ -22,6 +24,8 @@ def main():
     
     width ,height,entry_x1, entry_y1, exit_x2, exit_y2 ,flag,seed, outputfile = insert_values(result)
     # exit_cell = (height -1, width - 1)
+
+    random.seed(seed)
 
     validate_input(width,height,(entry_x1,entry_y1),(exit_x2,exit_y2))
 
@@ -57,7 +61,16 @@ def main():
     with open(outputfile,"w") as file:
             file.write(output)
     # print(maze.get_42_cells())
-    maze.draw()
+    run_display(
+        maze=maze,
+        entry=(entry_x1, entry_y1),
+        exit_=(exit_x2, exit_y2),
+        seed=seed,
+        width=width,
+        height=height,
+        perfect=flag,
+        show_42=show_42,
+    )
     # hex_string = maze.to_hex_file((entry_x1, entry_y1),(exit_x2, exit_y2))
     
     

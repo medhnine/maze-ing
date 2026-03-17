@@ -1,0 +1,28 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Mypy cache
+.mypy_cache/
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Pytest
+.pytest_cache/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Output files
+maze.txt

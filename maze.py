@@ -7,12 +7,14 @@ class Maze:
     WEST = 8
 
     def __init__(self, width: int, height: int, seed_value, show_42: bool = True):
+        random.seed(seed_value)
         self.width = 1
         self.height = 1
-        self.random = random.Random(seed_value)
+        self.random = random
         self.show_42 = show_42
         self.set_dimension(width, height)
         self.grid = []
+        
         for row in range(self.height):
             current_row = []
             for col in range(self.width):
@@ -78,42 +80,42 @@ class Maze:
                     self.open_wall(row, col, "E")
 
     # -----------------------------
-    # ASCII Drawing
-    # -----------------------------
+    # # ASCII Drawing
+    # # -----------------------------
 
-    def draw(self):
-        top_line = "+"
-        for col in range(self.width):
-            if self.has_wall(0, col, "N"):
-                top_line += "---+"
-            else:
-                top_line += "   +"
-        print(top_line)
+    # def draw(self):
+    #     top_line = "+"
+    #     for col in range(self.width):
+    #         if self.has_wall(0, col, "N"):
+    #             top_line += "---+"
+    #         else:
+    #             top_line += "   +"
+    #     print(top_line)
 
-        for row in range(self.height):
+    #     for row in range(self.height):
 
-            line = ""
-            for col in range(self.width):
+    #         line = ""
+    #         for col in range(self.width):
 
-                if col == 0:
-                    line += "|" if self.has_wall(row, col, "W") else " "
+    #             if col == 0:
+    #                 line += "|" if self.has_wall(row, col, "W") else " "
 
-                if self.show_42 and self.check_42(self.height, self.width, row, col):
-                    if (col > (self.width / 2) - 1):
-                        line += " 2 "
-                    else:
-                        line += " 4 "
-                else:
-                    line += "   "
+    #             if self.show_42 and self.check_42(self.height, self.width, row, col):
+    #                 if (col > (self.width / 2) - 1):
+    #                     line += " 2 "
+    #                 else:
+    #                     line += " 4 "
+    #             else:
+    #                 line += "   "
 
-                line += "|" if self.has_wall(row, col, "E") else " "
+    #             line += "|" if self.has_wall(row, col, "E") else " "
 
-            print(line)
+    #         print(line)
 
-            bottom = "+"
-            for col in range(self.width):
-                bottom += "---+" if self.has_wall(row, col, "S") else "   +"
-            print(bottom)
+    #         bottom = "+"
+    #         for col in range(self.width):
+    #             bottom += "---+" if self.has_wall(row, col, "S") else "   +"
+    #         print(bottom)
     @staticmethod
     def check_42(rows, columns, row, column):
         """Check if cell (row, column) is part of the '42' pattern.
