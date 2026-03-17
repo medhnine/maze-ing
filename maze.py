@@ -7,14 +7,12 @@ class Maze:
     WEST = 8
 
     def __init__(self, width: int, height: int, seed_value, show_42: bool = True):
-        random.seed(seed_value)
         self.width = 1
         self.height = 1
-        self.random = random
-        self.show_42 = show_42
+        self.random = random.Random(seed_value)
         self.set_dimension(width, height)
+        self.show_42 = show_42
         self.grid = []
-        
         for row in range(self.height):
             current_row = []
             for col in range(self.width):
@@ -62,60 +60,7 @@ class Maze:
             self.grid[row][col - 1] &= ~self.EAST
 
 
-    def generate_binary_tree(self):
-        for row in range(self.height):
-            for col in range(self.width):
 
-                can_go_north = row > 0
-                can_go_east = col < self.width - 1
-
-                if can_go_north and can_go_east:
-                    direction = self.random.choice(["N", "E"])
-                    self.open_wall(row, col, direction)
-
-                elif can_go_north:
-                    self.open_wall(row, col, "N")
-
-                elif can_go_east:
-                    self.open_wall(row, col, "E")
-
-    # -----------------------------
-    # # ASCII Drawing
-    # # -----------------------------
-
-    # def draw(self):
-    #     top_line = "+"
-    #     for col in range(self.width):
-    #         if self.has_wall(0, col, "N"):
-    #             top_line += "---+"
-    #         else:
-    #             top_line += "   +"
-    #     print(top_line)
-
-    #     for row in range(self.height):
-
-    #         line = ""
-    #         for col in range(self.width):
-
-    #             if col == 0:
-    #                 line += "|" if self.has_wall(row, col, "W") else " "
-
-    #             if self.show_42 and self.check_42(self.height, self.width, row, col):
-    #                 if (col > (self.width / 2) - 1):
-    #                     line += " 2 "
-    #                 else:
-    #                     line += " 4 "
-    #             else:
-    #                 line += "   "
-
-    #             line += "|" if self.has_wall(row, col, "E") else " "
-
-    #         print(line)
-
-    #         bottom = "+"
-    #         for col in range(self.width):
-    #             bottom += "---+" if self.has_wall(row, col, "S") else "   +"
-    #         print(bottom)
     @staticmethod
     def check_42(rows, columns, row, column):
         """Check if cell (row, column) is part of the '42' pattern.
@@ -213,47 +158,51 @@ class Maze:
                 break
     # if perfect is false this method creates more than one path
     def add_random_cycles(self):
-        """Open extra walls at dead-end cells to create multiple paths.
-        Same approach as mazegen.py: find cells with only 1 passage
-        (dead-ends) and open a random extra wall.
-        Values: 14 (only N open), 13 (only E open), 11 (only S open), 7 (only W open)."""
+        """Open extra walls to create multiple paths (imperfect maze).
+        First pass: open walls at all dead-end cells.
+        Second pass: randomly open extra walls to guarantee cycles
+        even in small mazes where dead-ends are rare."""
         dead_end_values = {14, 13, 11, 7}
 
+        # First pass: open dead-ends
         for row in range(self.height):
             for col in range(self.width):
-                # Skip 42 pattern cells
-                if self.check_42(self.height, self.width, row, col):
+                if self.show_42 and self.check_42(self.height, self.width, row, col):
                     continue
-
                 if self.grid[row][col] in dead_end_values:
-                    # Collect valid non-42 neighbors
                     neighbors = []
-                    if row > 0 and not self.check_42(self.height, self.width, row - 1, col):
+                    if row > 0 and not (self.show_42 and self.check_42(self.height, self.width, row - 1, col)):
                         neighbors.append("N")
-                    if col < self.width - 1 and not self.check_42(self.height, self.width, row, col + 1):
+                    if col < self.width - 1 and not (self.show_42 and self.check_42(self.height, self.width, row, col + 1)):
                         neighbors.append("E")
-                    if row < self.height - 1 and not self.check_42(self.height, self.width, row + 1, col):
+                    if row < self.height - 1 and not (self.show_42 and self.check_42(self.height, self.width, row + 1, col)):
                         neighbors.append("S")
-                    if col > 0 and not self.check_42(self.height, self.width, row, col - 1):
+                    if col > 0 and not (self.show_42 and self.check_42(self.height, self.width, row, col - 1)):
                         neighbors.append("W")
-
                     if neighbors:
-                        # Pick a random neighbor direction and open the wall
                         self.random.shuffle(neighbors)
-                        self.open_wall(row, col, neighbors[0])
-        
+                        if self.has_wall(row, col, neighbors[0]):
+                            self.open_wall(row, col, neighbors[0])
+
+        # Second pass: randomly open extra walls to guarantee cycles
+        # especially in small mazes where dead-ends are rare
         total_cells = self.width * self.height
         extra_openings = max(2, total_cells // 8)
-        print(extra_openings)
-        all_cells = [(r, c)for r in range(self.height) for c in range(self.width)
+
+        all_cells = [
+            (r, c)
+            for r in range(self.height)
+            for c in range(self.width)
             if not (self.show_42 and self.check_42(self.height, self.width, r, c))
         ]
         self.random.shuffle(all_cells)
+
         opened = 0
         for row, col in all_cells:
             if opened >= extra_openings:
                 break
             neighbors = []
+            # only add neighbors that are strictly inside the maze (not border walls)
             if row > 0 and not (self.show_42 and self.check_42(self.height, self.width, row - 1, col)):
                 neighbors.append("N")
             if col < self.width - 1 and not (self.show_42 and self.check_42(self.height, self.width, row, col + 1)):
@@ -262,11 +211,13 @@ class Maze:
                 neighbors.append("S")
             if col > 0 and not (self.show_42 and self.check_42(self.height, self.width, row, col - 1)):
                 neighbors.append("W")
-            if neighbors:
-                self.random.shuffle(neighbors)
+            # skip border cells with no valid interior neighbors
+            if not neighbors:
+                continue
+            self.random.shuffle(neighbors)
+            if self.has_wall(row, col, neighbors[0]):
                 self.open_wall(row, col, neighbors[0])
                 opened += 1
-
     # 01/03/2026
     
     

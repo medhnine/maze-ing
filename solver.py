@@ -6,7 +6,7 @@ class MazeSolver:
               end_row: int, end_col: int):
 
         # Create queue and add starting position
-        queue = deque()
+        queue: deque = deque()
         queue.append((start_row, start_col))
 
         # Track visited cells
@@ -17,7 +17,7 @@ class MazeSolver:
         # move = ""
 
         # Store parent of each cell to reconstruct path
-        parent = {}
+        parent: dict = {}
         parent[(start_row, start_col)] = None
 
         # Start BFS loop
@@ -59,8 +59,10 @@ class MazeSolver:
                         new_col = current_col - 1
                         # move = "W"
 
-                    # If neighbor not visited, process it
-                    if (new_row, new_col) not in visited:
+                    # If neighbor not visited and within bounds, process it
+                    if (0 <= new_row < self.maze.height
+                            and 0 <= new_col < self.maze.width
+                            and (new_row, new_col) not in visited):
 
                         visited.add((new_row, new_col))
                         parent[(new_row, new_col)] = (current_row, current_col)

@@ -138,6 +138,39 @@ python3 -m build
 
 ---
 
+
+---
+
+## Visual display
+
+The maze is displayed interactively in the terminal using Python's built-in `curses` library. The display is handled by `display.py` and launched automatically after the maze is generated.
+
+### What is shown
+
+- **Walls** — drawn using block characters, colored based on current wall color
+- **Entry cell** — marked with `E` in green
+- **Exit cell** — marked with `X` in red
+- **42 pattern** — cells fully closed, highlighted in yellow
+- **Solution path** — highlighted in cyan/green when toggled on
+
+### Key bindings
+
+| Key | Action |
+|-----|--------|
+| `1` or `r` | Re-generate a new maze |
+| `2` or `p` | Show / hide the shortest path |
+| `3` or `c` | Cycle through wall colors |
+| `4` or `q` | Quit |
+
+### Wall colors
+
+The wall color cycles through: **blue, white, cyan, magenta, red**. Green and yellow are excluded — green clashes with the solution path background, yellow clashes with the 42 pattern color.
+
+### Re-generation behavior
+
+- If `seed` is set in the config → re-generation increments the seed each time, producing different but reproducible mazes
+- If `seed` is not set → re-generation picks a new random seed each time, producing a completely random maze
+
 ## Team and project management
 
 ### Roles
@@ -178,5 +211,7 @@ What could be improved: our `a_maze_ing.py` and `mazegen.py` are somewhat separa
 
 We used Claude (Anthropic) during this project for the following tasks:
 - Understanding Python packaging concepts (pyproject.toml, .whl, src layout)
+- Generating the Makefile with the correct mypy and flake8 flags from the subject
+- Drafting this README structure
 
 All AI-generated content was carefully reviewed, tested, and adapted. We made sure to fully understand every line before including it in the project.

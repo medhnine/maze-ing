@@ -45,7 +45,6 @@ def main():
         exit(2)
 
     maze = Maze(width, height, seed, show_42)
-    # maze.generate_binary_tree()
     maze.generate_dfs()
     if not flag:
         maze.add_random_cycles()
