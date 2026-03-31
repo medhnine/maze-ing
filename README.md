@@ -61,7 +61,6 @@ The configuration file uses `KEY=VALUE` pairs, one per line. Lines starting with
 | `OUTPUT_FILE` | Output filename (must end in .txt) | Yes | `OUTPUT_FILE=maze.txt` |
 | `PERFECT` | If True, only one path exists between entry and exit | Yes | `PERFECT=True` |
 | `seed` | Integer seed for reproducibility | No | `seed=42` |
-| `algorithm` | `prim` or `recursive backtracking` | No | `algorithm=prim` |
 
 ### Example config file
 
@@ -74,7 +73,6 @@ EXIT=14,19
 OUTPUT_FILE=maze.txt
 PERFECT=True
 seed=42
-algorithm=recursive backtracking
 ```
 
 ---
@@ -85,7 +83,7 @@ We implemented two algorithms:
 
 **Recursive Backtracking (DFS)** — used as the default in `maze.py` and available in `mazegen.py`. It starts from a random cell, carves passages by visiting unvisited neighbors recursively, and backtracks when stuck. It produces mazes with long winding corridors and a single solution when PERFECT is enabled.
 
-**Prim's algorithm** — available in `mazegen.py`. It starts from the entry cell, maintains a frontier of reachable unvisited cells, and randomly picks one to connect at each step. It produces mazes with more branching and a more uniform feel.
+**bfs's algorithm** — available in `mazegen.py`. It starts from the entry cell, maintains a frontier of reachable unvisited cells, and randomly picks one to connect at each step. It produces mazes with more branching and a more uniform feel.
 
 ### Why we chose these algorithms
 
@@ -168,15 +166,15 @@ The wall color cycles through: **blue, white, cyan, magenta, red**. Green and ye
 
 ### Re-generation behavior
 
-- If `seed` is set in the config → re-generation increments the seed each time, producing different but reproducible mazes
-- If `seed` is not set → re-generation picks a new random seed each time, producing a completely random maze
+- If `seed` is set in the config → seed setted to its value, producing same mazes
+- If `seed` is not set → re-generation seed setted to None, producing a completely random maze
 
 ## Team and project management
 
 ### Roles
 
-- **mohhnine** — maze generation logic (`maze.py`, `mazegen.py`), DFS and Prim algorithms, "42" pattern implementation, hex output format
-- **bahriz** — solver (`solver.py`), BFS pathfinding, parser (`parser.py`), config validation, main entry point (`a_maze_ing.py`)
+- **mohhnine** — maze generation logic (`mazegen.py`), DFS and BFS algorithms, solver (`solver.py`), BFS pathfinding, parser (`parser.py`), config validation, main entry point (`a_maze_ing.py`), "42" pattern implementation, hex output format
+- **bahriz** — display.py
 
 ### Planning
 
@@ -211,7 +209,7 @@ What could be improved: our `a_maze_ing.py` and `mazegen.py` are somewhat separa
 
 We used Claude (Anthropic) during this project for the following tasks:
 - Understanding Python packaging concepts (pyproject.toml, .whl, src layout)
-- Generating the Makefile with the correct mypy and flake8 flags from the subject
+- Understanding DFS, BFS
 - Drafting this README structure
 
 All AI-generated content was carefully reviewed, tested, and adapted. We made sure to fully understand every line before including it in the project.

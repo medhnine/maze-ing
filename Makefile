@@ -24,4 +24,9 @@ lint-strict:
 	flake8 .
 	mypy . --strict
 
+build:
+	python3 -m build
+	cp ./dist/mazegen-1.0.0.tar.gz ./mazegen.tar.gz
+	rm -rf build dist
+
 .PHONY: install run debug clean lint lint-strict

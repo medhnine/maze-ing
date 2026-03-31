@@ -3,7 +3,7 @@
 import curses
 from typing import List, Set, Tuple
 
-from maze import Maze
+from mazegen import MazeGenerator
 from solver import MazeSolver
 
 # ---------------------------------------------------------------------------
@@ -95,7 +95,7 @@ def _safe_addstr(
 
 def _draw_maze(
     win: curses.window,
-    maze: Maze,
+    maze: MazeGenerator,
     entry: Tuple[int, int],
     exit_: Tuple[int, int],
     path_set: Set[Tuple[int, int]],
@@ -125,7 +125,7 @@ def _draw_maze(
         _safe_addstr(win, 0, 6 * col + 1, seg, wall_a)
         # _safe_addstr(win, 0, 6 * col + 4, '███', wall_a)
 
-    for row in range(maze.height):  
+    for row in range(maze.height):
         sy = 2 * row + 1
 
         # left border of row
@@ -160,7 +160,7 @@ def _draw_maze(
         for col in range(maze.width):
             seg = '███' if maze.has_wall(row, col, 'S') else '   '
             _safe_addstr(win, by, 6 * col + 1, seg + '███', wall_a)
-        
+
         # ── path connectors ──────────────────────────────────────────
         if show_path:
             for col in range(maze.width):
@@ -173,14 +173,24 @@ def _draw_maze(
                 if (col < maze.width - 1
                         and (row, col + 1) in path_set
                         and not maze.has_wall(row, col, 'E')):
-                    _safe_addstr(win, sy, 6 * col + 4, '   ',
-                                curses.color_pair(CP_PATH))
+                    _safe_addstr(
+                        win,
+                        sy,
+                        6 * col + 4,
+                        '   ',
+                        curses.color_pair(CP_PATH),
+                    )
                 # south connector
                 if (row < maze.height - 1
                         and (row + 1, col) in path_set
                         and not maze.has_wall(row, col, 'S')):
-                    _safe_addstr(win, by, 6 * col + 1, '   ',
-                                 curses.color_pair(CP_PATH))
+                    _safe_addstr(
+                        win,
+                        by,
+                        6 * col + 1,
+                        '   ',
+                        curses.color_pair(CP_PATH),
+                    )
 
 
 def _draw_menu(
@@ -213,10 +223,10 @@ def _draw_menu(
 # ---------------------------------------------------------------------------
 
 def run_display(
-    maze: Maze,
+    maze: MazeGenerator,
     entry: Tuple[int, int],
     exit_: Tuple[int, int],
-    seed: int,
+    seed: int | None,
     width: int,
     height: int,
     perfect: bool,
@@ -253,8 +263,8 @@ def run_display(
         color_idx: int = 0
         _init_colors(color_idx)
 
-        current_maze: Maze = maze
-        current_seed: int = seed
+        current_maze: MazeGenerator = maze
+        current_seed: int | None = seed
         show_path: bool = False
 
         solver = MazeSolver(current_maze)
@@ -278,7 +288,12 @@ def run_display(
 
             elif key in (ord('1'), ord('r'), ord('R')):
                 current_seed = seed
-                current_maze = Maze(width, height, current_seed, show_42)
+                current_maze = MazeGenerator(
+                    width,
+                    height,
+                    current_seed,
+                    show_42,
+                )
                 current_maze.generate_dfs()
                 if not perfect:
                     current_maze.add_random_cycles()
