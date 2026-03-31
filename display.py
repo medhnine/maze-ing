@@ -231,6 +231,7 @@ def run_display(
     height: int,
     perfect: bool,
     show_42: bool = True,
+    outputfile: str = '',
 ) -> None:
     """Launch the interactive curses display for the maze.
 
@@ -295,6 +296,14 @@ def run_display(
                     show_42,
                 )
                 current_maze.generate_dfs()
+                directions = solver.path_into_dir(path)
+
+                output = current_maze.to_hex_string()
+                output += f"\n{entry[0]},{entry[1]}"
+                output += f"\n{exit_[0]},{exit_[1]}\n"
+                output += directions + "\n"
+                with open(outputfile, "w") as file:
+                    file.write(output)
                 if not perfect:
                     current_maze.add_random_cycles()
                 solver = MazeSolver(current_maze)

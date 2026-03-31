@@ -98,7 +98,10 @@ The maze generation logic is packaged as a pip-installable module called `mazege
 ### Installation
 
 ```bash
-pip install mazegen-1.0.0-py3-none-any.whl
+python3 -m venv test_env
+source test_env/bin/activate
+pip install mazegen-1.0.0-py3-none-any.gz
+python3 /path/a_maze_ing.py /path/config.txt
 ```
 
 ### Basic example
@@ -129,9 +132,7 @@ All parameters are passed via the config file. You can change the seed, dimensio
 ### Rebuild the package from source
 
 ```bash
-pip install build
-python3 -m build
-# outputs dist/mazegen-1.0.0-py3-none-any.whl and dist/mazegen-1.0.0.tar.gz
+make build
 ```
 
 ---
@@ -174,7 +175,7 @@ The wall color cycles through: **blue, white, cyan, magenta, red**. Green and ye
 ### Roles
 
 - **mohhnine** — maze generation logic (`mazegen.py`), DFS and BFS algorithms, solver (`solver.py`), BFS pathfinding, parser (`parser.py`), config validation, main entry point (`a_maze_ing.py`), "42" pattern implementation, hex output format
-- **bahriz** — display.py
+- **bahriz** — walls && path display.py 
 
 ### Planning
 
@@ -188,7 +189,7 @@ What could be improved: our `a_maze_ing.py` and `mazegen.py` are somewhat separa
 
 ### Tools used
 
-- **Claude (Anthropic)** — used to help understand Python packaging (pyproject.toml, building .whl files), generate the Makefile structure, and review README requirements. All generated code was reviewed, tested and understood before use.
+- **Claude (Anthropic)** — used to help understand Python packaging (pyproject.toml, building .whl files), Makefile structure, and review README requirements.
 - **Git** — version control and collaboration
 - **mypy / flake8** — static type checking and linting
 - **pytest** — local unit testing (not submitted)

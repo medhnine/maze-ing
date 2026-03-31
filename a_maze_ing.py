@@ -1,3 +1,5 @@
+"""CLI entry point for generating, saving, and displaying mazes."""
+
 from display import run_display
 from mazegen import MazeGenerator
 from parser import chuck_data, get_data, insert_values, validate_input
@@ -24,7 +26,7 @@ def main() -> None:
         outputfile,
     ) = insert_values(result)
 
-    seed = seed if seed is not None else None
+    seed = seed
 
     validate_input(
         width,
@@ -63,7 +65,6 @@ def main() -> None:
     output += f"\n{entry_x1},{entry_y1}"
     output += f"\n{exit_x2},{exit_y2}\n"
     output += directions + "\n"
-    print(outputfile)
     with open(outputfile, "w") as file:
         file.write(output)
     run_display(
@@ -75,6 +76,7 @@ def main() -> None:
         height=height,
         perfect=flag,
         show_42=show_42,
+        outputfile=outputfile,
     )
 
 

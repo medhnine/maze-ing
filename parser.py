@@ -42,6 +42,9 @@ def chuck_data(data: List[str]) -> Dict[str, str]:
                 )
                 exit(2)
             key, value = line.split("=", 1)
+            if key in store:
+                print("duplicated key")
+                exit(2)
             store[key.strip()] = value.strip()
     except Exception as e:
         print(

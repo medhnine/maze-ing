@@ -171,6 +171,7 @@ class MazeGenerator:
                         )
                     ):
                         neighbors.append("N")
+
                     if col < self.width - 1 and not (
                         self.show_42 and self.check_42(
                             self.height,
