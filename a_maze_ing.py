@@ -64,7 +64,7 @@ def main() -> None:
     output = maze.to_hex_string()
     output += f"\n{entry_x1},{entry_y1}"
     output += f"\n{exit_x2},{exit_y2}\n"
-    output += directions + "\n"
+    output += directions
     with open(outputfile, "w") as file:
         file.write(output)
     run_display(

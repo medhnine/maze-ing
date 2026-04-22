@@ -301,7 +301,7 @@ def run_display(
                 output = current_maze.to_hex_string()
                 output += f"\n{entry[0]},{entry[1]}"
                 output += f"\n{exit_[0]},{exit_[1]}\n"
-                output += directions + "\n"
+                output += directions
                 with open(outputfile, "w") as file:
                     file.write(output)
                 if not perfect:

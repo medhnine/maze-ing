@@ -107,23 +107,13 @@ python3 /path/a_maze_ing.py /path/config.txt
 ### Basic example
 
 ```python
-from mazegen.mazegen import MazeGenerator
-import sys
+from mazegen import MazeGenerator
 
-sys.argv = ["mazegen.py", "config.txt"]
 maze = MazeGenerator()
+maze.generate_dfs()
 
-# Access the grid (list of lists of ints)
-grid = maze.get_grid()
 
-# Access entry and exit
-entry = maze.get_entry()   # e.g. [0, 0]
-exit  = maze.get_exit()    # e.g. [14, 19]
 
-# Access the solution path
-path = maze.get_path()           # list of [row, col] cells
-directions = maze.strin_path     # e.g. "SSSEEENEE..."
-```
 
 ### Custom parameters
 

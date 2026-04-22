@@ -1,6 +1,7 @@
 PYTHON = python3
 MAIN = a_maze_ing.py
 CONFIG = config.txt
+PUSH_DIR = ~/Documents/maze_push
 
 install:
 	pip install flake8 mypy --break-system-packages
@@ -28,4 +29,7 @@ build:
 	cp ./dist/mazegen-1.0.0.tar.gz ./mazegen.tar.gz
 	rm -rf build dist
 
-.PHONY: install run debug clean lint lint-strict
+push:
+	cp -r * $(PUSH_DIR)
+
+.PHONY: install run debug clean lint lint-strict push
